@@ -1,0 +1,12 @@
+{
+  "name": "buffet-bot",
+  "version": "1.0.0",
+  "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "heroku-postbuid": "cd client && npm install && npm run build && npm run start"
+  },
+  "author": "",
+  "license": "ISC"
+}
