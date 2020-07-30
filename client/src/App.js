@@ -138,6 +138,7 @@ displayMetrics() {
           
           <h3 classname="lead">Automated Fundamental Financial Analysis for NYSE-Listed Stocks</h3>
           <h5 className="lead">A project by Shrinjay Mukherjee</h5>
+          <h5 className="lead">Art by Cheryl Li</h5>
           <br />
           <span>
          <Row>
