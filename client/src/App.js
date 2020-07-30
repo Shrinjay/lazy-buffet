@@ -128,13 +128,13 @@ displayMetrics() {
       <div>
         <Navbar>
         <Container fluid>
-          <Col sm="12">
+          <Col xs="12">
           <Jumbotron style={{backgroundColor: "#ff8680", color: 'white'}}>
-          <Col sm={{size: 10, offset: 2}}>
+          <Col xs={{size: 10, offset: 2}}>
             <Media>
               <Media object src={require('./img/buffet.png')} style={{maxHeight: "128px", maxWidth: "128px"}}></Media>
-              <Media heading><h1 className="display-3"><b>Lazy-Buffet</b></h1></Media>
-             </Media>
+            </Media>
+            <h2 className="display-3"><b>Lazy-Buffet</b></h2>
           
           <h3 classname="lead">Automated Fundamental Financial Analysis for NYSE-Listed Stocks</h3>
           <h5 className="lead">A project by Shrinjay Mukherjee</h5>
@@ -154,7 +154,7 @@ displayMetrics() {
         </Navbar>
         <Container style={{color: 'white'}}>
          <Row>
-         <Col sm={{size: 8, offset: 2}}>
+         <Col xs={{size: 8, offset: 2}}>
           <Form>
            <Label for="inputTicker"><h5 className="lead">Enter the ticker (1-4 digit) for an NYSE listed stock (ex. Apple: AAPL):</h5></Label>
           <Input type="text" onChange={this.handleChange}></Input>
