@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "heroku-postbuid": "cd client && npm install && npm run build && npm run start"
+    "heroku-postbuild": "cd client && npm install && npm run build && npm run start"
   },
   "author": "",
   "license": "ISC"
