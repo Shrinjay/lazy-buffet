@@ -9,6 +9,9 @@ require('dotenv').config()
 app.use(express.json())
 app.use(cors({origin:'http://localhost:3000'}))
 
+const path = require('path');
+    app.use(express.static('client/build'));
+
 app.post('/api/OVERVIEW', async (request, response)=>{
    
     const ticker = request.body.ticker
@@ -22,8 +25,8 @@ app.post('/api/BALANCE_SHEET', async (request, response)=>{
     let APIresponse = await axios.get(`https://www.alphavantage.co/query?function=BALANCE_SHEET&symbol=${ticker}&apikey=${process.env.API_KEY}`)
     response.json(APIresponse.data)
 })
-
-const port=5000
+app.get('*', (req, res) => res.sendFile(path.resolve('client/build', 'index.html')));
+const port=process.env.PORT
 
 app.listen(port, ()=>{ //Just verification to make sure the server works 
     console.log(port);
