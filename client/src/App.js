@@ -1,11 +1,10 @@
+//Imports
 import React from 'react';
 import {Form, Input, Label, Col, Row, Container, Jumbotron, Navbar, Button, NavbarBrand, Media} from 'reactstrap';
 import logo from './logo.svg';
 import './App.css';
 const axios = require('axios')
 
-
-/* Finish this project up in a few days then don't touch it again */
 
 class App extends React.Component{
 
@@ -22,12 +21,14 @@ class App extends React.Component{
   }
 
   
-
+  //Handle changes to form
   handleChange(event){
     this.setState({ticker: event.target.value})
   }
  
+  //Make api request and calculate a score for a stock
 async calculateScore() {
+  //Initialize object to store company info. 
     var companyData = {
         debtRatio: null,
         currentRatio: null,
@@ -38,18 +39,22 @@ async calculateScore() {
         PBV: null,
         dividendYield: null,
     }
+    //Clear metrics and recommendation.
     this.setState({metrics: null, recommendation: null})
 
+    //Check for empty input
     if(this.state.ticker.length==0)
     {
       this.setState({recommendation: "Invalid Ticker"})
       return
     }
   
+    //Make API request
     let resOverview = await axios.post('/api/OVERVIEW/', {
       "ticker": this.state.ticker
     })
-    console.log(resOverview)
+    
+    //Client-side validation
     if (Object.keys(resOverview.data).length==0)
     { 
         this.setState({recommendation: "Invalid Ticker"})
@@ -60,24 +65,29 @@ async calculateScore() {
       this.setState({recommendation: "Too many requests, please try again in 1 minute"})
       return
     }
+    
+    //Fill company info from API response and calculate scores
     companyData.profitMargin = (parseFloat(resOverview.data.ProfitMargin)/0.4)
     companyData.PEG = (1/parseFloat(resOverview.data.PEGRatio))
     companyData.PE = (9/parseFloat(resOverview.data.PERatio))
     companyData.PBV = (1.20/parseFloat(resOverview.data.PriceToBookRatio))
     
+    //Make API request for balance sheet
     let resBalance = await axios.post(`/api/BALANCE_SHEET`, {
       "ticker": this.state.ticker
     })
 
-    
+    //Calculate scores for debt ratio and current ratio
     companyData.debtRatio = ((parseFloat(resBalance.data.quarterlyReports[1].totalAssets))/(parseFloat(resBalance.data.quarterlyReports[1].shortTermDebt)+parseFloat(resBalance.data.quarterlyReports[1].longTermDebt)))
     companyData.currentRatio = ((parseFloat(resBalance.data.quarterlyReports[2].totalCurrentAssets))/(parseFloat(resBalance.data.quarterlyReports[1].totalCurrentLiabilities))/1.5)
 
+    //Validation for data being unavailable
     if (isNaN(parseFloat(resBalance.data.quarterlyReports[1].shortTermDebt)+parseFloat(resBalance.data.quarterlyReports[1].longTermDebt)))
     {
       companyData.debtRatio = 2
     }
     
+    //Clear company data
     Object.entries(companyData).forEach(entry => {
         if (entry[1]==null || entry[1]==Infinity || typeof(entry[1])=='undefined' || isNaN(entry[1]))
         {   
@@ -86,6 +96,7 @@ async calculateScore() {
         
     })
 
+    //Calculate score
     var sum = 0
     var divisor = 0;
     Object.values(companyData).forEach(val => {
@@ -94,9 +105,10 @@ async calculateScore() {
     })
     
     var score = sum/divisor
-    
+  
    this.setState({metrics: companyData})
 
+    //Calculate recommendation
     if (score>=1)
     {
       this.setState({recommendation: 'BUY'})
