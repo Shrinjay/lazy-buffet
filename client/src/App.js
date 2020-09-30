@@ -12,7 +12,7 @@ class App extends React.Component{
   constructor(props){
     super(props);
     this.state={
-      ticker: null,
+      ticker: "",
       recommendation: null,
       metrics: null
     }
@@ -39,6 +39,12 @@ async calculateScore() {
         dividendYield: null,
     }
     this.setState({metrics: null, recommendation: null})
+
+    if(this.state.ticker.length==0)
+    {
+      this.setState({recommendation: "Invalid Ticker"})
+      return
+    }
   
     let resOverview = await axios.post('/api/OVERVIEW/', {
       "ticker": this.state.ticker
@@ -119,9 +125,6 @@ displayMetrics() {
   <div>{key} is {this.state.metrics[key]>=1 && <b>Good</b>} {this.state.metrics[key]<1 && this.state.metrics[key]>=0.6 ? <b>OK</b>: false} {this.state.metrics[key]<0.6 && <b>Poor</b>}</div>)
   
 }
-
-
-
  
   render(){
     return (
